@@ -13,6 +13,10 @@ const getQuestionList = async (examId): Promise<ExamQuestion[] | null> => {
         where: {
             examId,
             deletedAt: null
+        },
+        include: {
+            exam: true,
+            examAnswers: true
         }
     });
 };

@@ -18,6 +18,19 @@ const getExamList = async (): Promise<Exam[] | null> => {
     });
 };
 
+const getExamsByLesson = async (lessonId): Promise<Exam[] | null> => {
+    return prisma.exam.findMany({
+        orderBy: { createdAt: "asc" },
+        where: {
+            lessonId,
+            deletedAt: null
+        },
+        include: {
+            lesson: true
+        }
+    });
+}
+
 const createExam = async (exam): Promise<Exam | null> => {
     return prisma.exam.create({
         data: exam
@@ -45,10 +58,10 @@ const deleteExam = async (examId): Promise<Exam | null> => {
         where: {
             id: examId
         },
-        data: {deletedAt: new Date() }
+        data: { deletedAt: new Date() }
 
     })
 };
 
 
-export default {getExamList, findExamById, createExam, updateExam, deleteExam}
+export default { getExamsByLesson, getExamList, findExamById, createExam, updateExam, deleteExam }

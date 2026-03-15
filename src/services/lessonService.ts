@@ -18,6 +18,7 @@ const getLessonList = async (): Promise<Lesson[] | null> => {
     });
 };
 
+
 const createLesson = async (lesson): Promise<Lesson | null> => {
     return prisma.lesson.create({
         data: lesson

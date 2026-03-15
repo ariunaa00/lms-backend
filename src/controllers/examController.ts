@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import examService from "../services/examService";
+import lessonService from "../services/lessonService";
 
 export const getExamList = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -27,9 +28,14 @@ export const saveExam = async (req: Request, res: Response, next: NextFunction) 
     }
 }
 
-export const getLessonExams = async (req: Request, res: Response, next: NextFunction) => {
+export const getExamsOfLesson = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        
+        const lessonId = Number(req.params.lessonId);
+        if(!lessonId){
+            return res.status(400).json({message: `lesson id not found.`})
+        }
+        const list = await examService.getExamsByLesson(lessonId)
+        return res.status(200).json(list)
     }
     catch (err) {
         next(err)

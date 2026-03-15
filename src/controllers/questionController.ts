@@ -14,6 +14,20 @@ export const getQuestionList = async (req: Request, res: Response, next: NextFun
 }
 
 
+export const getQuestionsOfExam = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const examId = Number(req.params.examId);
+        const list = await questionService.getQuestionList(examId);
+        res.status(200).json(list)
+
+    } catch (err) {
+        next(err)
+        res.status(500).json({ message: 'Алдаа гарлаа.' })
+    }
+}
+
+
+
 export const saveQuestions = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const questions = req.body;
