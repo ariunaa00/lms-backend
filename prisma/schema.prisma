@@ -1,0 +1,165 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  firstname   String
+  lastname    String
+  email       String       @unique
+  phoneNumber String      @unique
+
+  password    String
+  isAdmin     Boolean      @default(false)
+  examResults ExamResult[]
+  roles       UserRoleReg[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Lesson {
+  id            Int           @id @default(autoincrement())
+  name          String
+  imgUrl        String?
+
+  exams         Exam[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@map("lessons")
+}
+
+model Exam {
+  id            Int          @id @default(autoincrement())
+  lesson        Lesson       @relation(fields: [lessonId], references: [id])
+  lessonId      Int
+  name          String
+  duration      Int
+  durationUnit  String
+  questionNum   Int
+
+  examQuestions ExamQuestion[]
+  examResults   ExamResult[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@map("exam")
+}
+
+model ExamQuestion {
+  id        Int          @id @default(autoincrement())
+  exam      Exam         @relation(fields: [examId], references: [id])
+  examId    Int
+  questionText String
+  imgUrl    String?
+  audioUrl  String?
+  videoUrl  String?
+  examAnswers ExamAnswer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@map("exam_questions")
+}
+
+model ExamAnswer {
+  id          Int          @id @default(autoincrement())
+  question    ExamQuestion @relation(fields: [questionId], references: [id])
+  questionId  Int
+  answerText  String
+  isCorrect   Boolean      @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@map("exam_answers")
+}
+
+model ExamResult {
+  id                  Int      @id @default(autoincrement())
+  user                User     @relation(fields: [userId], references: [id])
+  userId              Int
+  exam                Exam   @relation(fields: [examId], references: [id])
+  examId              Int
+
+  correctPoint        Int
+  totalPoint          Int
+  totalTime           Int
+  answeredQuestionNum Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@map("exam_results")
+}
+
+model Role {
+  id                Int  @id @default(autoincrement())
+  name              String @unique
+  users             UserRoleReg[]
+  permissions       RolePermissionReg[]
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  deletedAt         DateTime?
+
+  @@map("role")
+}
+
+model Permission {
+  id        Int @id @default(autoincrement())
+  name      String @unique
+  roles     RolePermissionReg[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@map("permission")
+}
+
+model UserRoleReg {
+  userId  Int
+  roleId  Int
+
+  user      User @relation(fields: [userId], references: [id])
+  role      Role @relation(fields: [roleId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@id([userId, roleId]) 
+  @@map("user_role_reg")
+}
+
+model RolePermissionReg {
+  roleId       Int
+  permissionId Int
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@id([roleId, permissionId])
+  @@map("role_permission_reg")
+}
+
+
