@@ -1,5 +1,8 @@
 import dotenv from "dotenv";
+import multer from "multer";
 dotenv.config();
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 interface Config {
   port: number;
@@ -13,4 +16,4 @@ const config: Config = {
   jwtSecret: process.env.JWT_SECRET || "default_secret",
 };
 
-export default config;
+export  {config, upload};

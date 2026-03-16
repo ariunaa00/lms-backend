@@ -86,6 +86,7 @@ model ExamAnswer {
   questionId  Int
   answerText  String
   isCorrect   Boolean      @default(false)
+  order       Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

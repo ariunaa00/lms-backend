@@ -13,10 +13,10 @@ export const getLessonList = async (req: Request, res: Response, next: NextFunct
     }
 }
 
-const deleteImageFromS3 = async (fileName) => {
+export const deleteImageFromS3 = async (fileName) => {
     const params = {
         Bucket: process.env.S3_BUCKET_NAME,
-        Key: fileName // path inside bucket
+        Key: fileName 
     };
     const command = new DeleteObjectCommand(params);
     await s3.send(command);
@@ -33,6 +33,7 @@ export const saveLesson = async (req: Request & { file: any }, res: Response, ne
             let lesson = await lessonService.findLessonById(parseInt(lessonId));
             if (lessonImage) {
                 const oldImgUrl = lesson.imgUrl;
+                
                 const params = {
                     Bucket: process.env.S3_BUCKET_NAME,
                     Key: `lesson/${lesson.id}/${Date.now()}-${lessonImage.originalname}`,
