@@ -3,6 +3,7 @@ import questionService from "../services/questionService";
 import { s3 } from "../server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { deleteImageFromS3 } from "./lessonController";
+import examService from "../services/examService";
 
 export const getQuestionList = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -136,6 +137,17 @@ export const saveQuestion = async (req: Request & { files: any }, res: Response,
 
     } catch (err) {
         res.status(500).json({ message: 'Алдаа гарлаа.' })
+        next(err)
+    }
+}
+
+
+export const getExam = async (req: Request & { files: any }, res: Response, next: NextFunction) => {
+    try {
+        const examId = parseInt(req.params.examId.toString())
+        const exam = await examService.getExam(examId);
+        res.json(exam)
+    } catch (err) {
         next(err)
     }
 }

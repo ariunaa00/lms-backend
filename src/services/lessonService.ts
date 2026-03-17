@@ -14,6 +14,9 @@ const getLessonList = async (): Promise<Lesson[] | null> => {
         orderBy: { createdAt: "asc" },
         where: {
             deletedAt: null
+        },
+        include: {
+            exams: true
         }
     });
 };

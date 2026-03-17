@@ -1,6 +1,6 @@
 
 
-import { Exam } from "@prisma/client"
+import { Exam, ExamResult } from "@prisma/client"
 import prisma from "../db"
 
 const findExamById = async (id): Promise<Exam | null> => {
@@ -14,6 +14,9 @@ const getExamList = async (): Promise<Exam[] | null> => {
         orderBy: { createdAt: "asc" },
         where: {
             deletedAt: null
+        },
+        include: {
+            lesson: true
         }
     });
 };
@@ -36,6 +39,21 @@ const createExam = async (exam): Promise<Exam | null> => {
         data: exam
     });
 };
+
+const getExam = async (id): Promise<Exam | null> => {
+    return prisma.exam.findFirst({
+        where: {
+            id
+        },
+        include: {
+            examQuestions: {
+                include: {
+                    examAnswers: true
+                }
+            }
+        }
+    })
+}
 
 const updateExam = async (exam): Promise<Exam | null> => {
     return prisma.exam.update({
@@ -63,5 +81,28 @@ const deleteExam = async (examId): Promise<Exam | null> => {
     })
 };
 
+const saveExamResult = async (result, examId, userId): Promise<ExamResult | null> => {
+    return prisma.examResult.create({
+        data: {
+            ...result,
+            exam: {
+                connect: {id: examId}
+            },
+            user: {
+                connect: {id: userId}
+            }
+        },
+    
+    })
+};
 
-export default { getExamsByLesson, getExamList, findExamById, createExam, updateExam, deleteExam }
+const getResult = async (userId, examId) : Promise<ExamResult[] | null> => {
+    return prisma.examResult.findMany({
+        where: {userId, examId},
+        include: {
+            exam: true
+        }
+    })
+}
+
+export default { getResult, saveExamResult, getExam, getExamsByLesson, getExamList, findExamById, createExam, updateExam, deleteExam }

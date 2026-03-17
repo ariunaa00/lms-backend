@@ -2,6 +2,7 @@ import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "../server";
 import lessonService from "../services/lessonService"
 import { Request, Response, NextFunction } from "express";
+import examService from "../services/examService";
 
 export const getLessonList = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -16,7 +17,7 @@ export const getLessonList = async (req: Request, res: Response, next: NextFunct
 export const deleteImageFromS3 = async (fileName) => {
     const params = {
         Bucket: process.env.S3_BUCKET_NAME,
-        Key: fileName 
+        Key: fileName
     };
     const command = new DeleteObjectCommand(params);
     await s3.send(command);
@@ -33,7 +34,7 @@ export const saveLesson = async (req: Request & { file: any }, res: Response, ne
             let lesson = await lessonService.findLessonById(parseInt(lessonId));
             if (lessonImage) {
                 const oldImgUrl = lesson.imgUrl;
-                
+
                 const params = {
                     Bucket: process.env.S3_BUCKET_NAME,
                     Key: `lesson/${lesson.id}/${Date.now()}-${lessonImage.originalname}`,
@@ -56,6 +57,13 @@ export const saveLesson = async (req: Request & { file: any }, res: Response, ne
             let lesson = await
                 lessonService.createLesson({ name: lessonName, imgUrl: null })
 
+            await examService.createExam({
+                lessonId: lesson.id,
+                name: `${lesson.name}-шалгалт 1`,
+                duration: 10,
+                durationUnit: 'min',
+                questionNum: 10
+            })
             const params = {
                 Bucket: process.env.S3_BUCKET_NAME,
                 Key: `lesson/${lesson.id}/${Date.now()}-${lessonImage.originalname}`,

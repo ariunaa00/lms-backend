@@ -15,16 +15,31 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
-export const createUser = async (req: Request, res: Response, next: NextFunction) => {
-  try {
+export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const {firstname, lastname, email, phoneNumber, password} = req.body;
+        if(!firstname || !lastname || !email || !phoneNumber || !password){
+            return res.status(401).json({message: 'Маш буруу хүсэлт байна.'})
+        }
 
-    const { firstname, lastname, email, password, phoneNumber } = req.body;
-    
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const user = await userService.createUser(firstname, lastname, email, phoneNumber, hashedPassword);
-    res.status(201).json(user);
+        if(await userService.findUserByEmail(email)){
+            return res.status(401).json({message: 'И-мэйл бүртгэлтэй байна.'})
+        }
 
-  } catch (err) {
-    next(err);
-  }
-};
+        
+        if(await userService.findUserByPhoneNum(phoneNumber)){
+            return res.status(401).json({message: 'Утасны дугаар бүртгэлтэй байна.'})
+        }
+
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        const user = await userService.createUser(firstname, lastname, email, phoneNumber, hashedPassword)
+        
+        const role = await userService.getRoleByName('user');
+        await userService.saveUserRole(user.id, role.id)
+        
+        return res.status(200).json(user);
+    } catch(err) {
+        next(err)
+    }
+}
