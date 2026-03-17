@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getExamList, getExamsOfLesson, getResult, saveExam, saveResult } from "../controllers/examController";
+import { getAllResult, getExamList, getExamsOfLesson, getResult, saveExam, saveResult } from "../controllers/examController";
 import { getExam, getQuestionList, getQuestionsOfExam, saveQuestion } from "../controllers/questionController";
 import { upload } from '../config'
 
