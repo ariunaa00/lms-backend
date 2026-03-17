@@ -16,5 +16,4 @@ router.post('/:examId/question', config_1.upload.fields([
 ]), questionController_1.saveQuestion);
 router.post('/:examId/result', examController_1.saveResult);
 router.get('/:examId/result', examController_1.getResult);
-router.get('/allresult', examController_1.getAllResult);
 exports.default = router;

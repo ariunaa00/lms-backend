@@ -5,6 +5,7 @@ import userRoutes from "./routes/userRoutes";
 import authRoutes from "./routes/authRoutes";
 import lessonRoutes from "./routes/lessonRoutes";
 import examRoutes from "./routes/examRoutes";
+import resultRoutes from "./routes/resultRoutes";
 
 import errorHandler from "./middlewares/errorHandler";
 import { authMiddleware } from "./middlewares/auth";
@@ -22,6 +23,7 @@ app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/users", authMiddleware, userRoutes);
 app.use("/api/v1/lesson", authMiddleware, lessonRoutes)
 app.use("/api/v1/exam", authMiddleware, examRoutes)
+app.use("/api/v1/result", authMiddleware, resultRoutes)
 
 app.use(errorHandler);
 
