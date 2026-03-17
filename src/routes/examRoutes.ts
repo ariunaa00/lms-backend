@@ -19,7 +19,6 @@ router.post('/:examId/question', upload.fields([
 
 router.post('/:examId/result', saveResult)
 router.get('/:examId/result', getResult)
-router.get('/allresult', getAllResult)
 
 
 
