@@ -1,0 +1,26 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const helmet_1 = __importDefault(require("helmet"));
+const cors_1 = __importDefault(require("cors"));
+const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const lessonRoutes_1 = __importDefault(require("./routes/lessonRoutes"));
+const examRoutes_1 = __importDefault(require("./routes/examRoutes"));
+const errorHandler_1 = __importDefault(require("./middlewares/errorHandler"));
+const auth_1 = require("./middlewares/auth");
+const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.static("public"));
+app.use((0, helmet_1.default)());
+app.use((0, cors_1.default)());
+app.use("/api/v1/auth", authRoutes_1.default);
+app.use("/api/v1/users", auth_1.authMiddleware, userRoutes_1.default);
+app.use("/api/v1/lesson", auth_1.authMiddleware, lessonRoutes_1.default);
+app.use("/api/v1/exam", auth_1.authMiddleware, examRoutes_1.default);
+app.use(errorHandler_1.default);
+exports.default = app;

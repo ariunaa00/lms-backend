@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const lessonController_1 = require("../controllers/lessonController");
+const examController_1 = require("../controllers/examController");
+const config_1 = require("../config");
+const router = (0, express_1.Router)();
+router.get("/", lessonController_1.getLessonList);
+router.post("/", config_1.upload.single('image'), lessonController_1.saveLesson);
+router.get("/:lessonId/exams", examController_1.getExamsOfLesson);
+router.get("/exams", examController_1.getExamList);
+exports.default = router;
