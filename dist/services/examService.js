@@ -46,7 +46,8 @@ const getExam = async (id) => {
             examQuestions: {
                 include: {
                     examAnswers: true
-                }
+                },
+                take: 10
             }
         }
     });
@@ -95,4 +96,12 @@ const getResult = async (userId, examId) => {
         }
     });
 };
-exports.default = { getResult, saveExamResult, getExam, getExamsByLesson, getExamList, findExamById, createExam, updateExam, deleteExam };
+const getAllResult = async (userId) => {
+    return db_1.default.examResult.findMany({
+        where: { userId },
+        include: {
+            exam: true
+        }
+    });
+};
+exports.default = { getResult, getAllResult, saveExamResult, getExam, getExamsByLesson, getExamList, findExamById, createExam, updateExam, deleteExam };

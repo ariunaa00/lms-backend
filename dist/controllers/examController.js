@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getResult = exports.saveResult = exports.getExamsOfLesson = exports.saveExam = exports.getExamList = void 0;
+exports.getResult = exports.saveResult = exports.getExamsOfLesson = exports.saveExam = exports.getAllResult = exports.getExamList = void 0;
 const examService_1 = __importDefault(require("../services/examService"));
 const getExamList = async (req, res, next) => {
     try {
@@ -15,6 +15,16 @@ const getExamList = async (req, res, next) => {
     }
 };
 exports.getExamList = getExamList;
+const getAllResult = async (req, res, next) => {
+    try {
+        const list = await examService_1.default.getAllResult(req.user.userId);
+        res.status(200).json(list);
+    }
+    catch (err) {
+        next(err);
+    }
+};
+exports.getAllResult = getAllResult;
 const saveExam = async (req, res, next) => {
     try {
         const exam = req.body();
