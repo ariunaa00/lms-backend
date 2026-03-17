@@ -17,7 +17,7 @@ const getExamList = async (req, res, next) => {
 exports.getExamList = getExamList;
 const getAllResult = async (req, res, next) => {
     try {
-        const list = await examService_1.default.getAllResult(req.user.userId);
+        const list = await examService_1.default.getAllResult();
         res.status(200).json(list);
     }
     catch (err) {

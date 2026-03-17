@@ -14,7 +14,7 @@ export const getExamList = async (req: Request, res: Response, next: NextFunctio
 export const getAllResult = async (req: Request & { user: any }, res: Response, next: NextFunction) => {
     try {
 
-        const list = await examService.getAllResult(req.user.userId);
+        const list = await examService.getAllResult();
         res.status(200).json(list)
     }
     catch (err) {

@@ -96,9 +96,8 @@ const getResult = async (userId, examId) => {
         }
     });
 };
-const getAllResult = async (userId) => {
+const getAllResult = async () => {
     return db_1.default.examResult.findMany({
-        where: { userId },
         include: {
             exam: true
         }

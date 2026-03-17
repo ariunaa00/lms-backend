@@ -106,9 +106,8 @@ const getResult = async (userId, examId): Promise<ExamResult[] | null> => {
     })
 }
 
-const getAllResult = async (userId): Promise<ExamResult[] | null> => {
+const getAllResult = async (): Promise<ExamResult[] | null> => {
     return prisma.examResult.findMany({
-        where: { userId },
         include: {
             exam: true
         }
