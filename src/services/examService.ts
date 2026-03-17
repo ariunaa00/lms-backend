@@ -48,7 +48,9 @@ const getExam = async (id): Promise<Exam | null> => {
         include: {
             examQuestions: {
                 include: {
-                    examAnswers: true
+                    examAnswers: {
+                        take: 10
+                    }
                 }
             }
         }
