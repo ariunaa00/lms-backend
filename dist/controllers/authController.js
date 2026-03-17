@@ -18,6 +18,7 @@ const loginAdmin = async (req, res, next) => {
             return res.status(401).json({ message: "Админ бүртгэлгүй байна." });
         }
         const userPermissions = await userService_1.default.getUserPermissions(user.id);
+        console.log(userPermissions);
         if (!userPermissions.includes('login_admin_page')) {
             return res.status(400).json({ message: 'Админ хуудсанд нэвтрэх эрх байхгүй байна.' });
         }
