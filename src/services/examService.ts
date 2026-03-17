@@ -48,10 +48,9 @@ const getExam = async (id): Promise<Exam | null> => {
         include: {
             examQuestions: {
                 include: {
-                    examAnswers: {
-                        take: 10
-                    }
-                }
+                    examAnswers: true
+                },
+                take: 10
             }
         }
     })
@@ -88,28 +87,28 @@ const saveExamResult = async (result, examId, userId): Promise<ExamResult | null
         data: {
             ...result,
             exam: {
-                connect: {id: examId}
+                connect: { id: examId }
             },
             user: {
-                connect: {id: userId}
+                connect: { id: userId }
             }
         },
-    
+
     })
 };
 
-const getResult = async (userId, examId) : Promise<ExamResult[] | null> => {
+const getResult = async (userId, examId): Promise<ExamResult[] | null> => {
     return prisma.examResult.findMany({
-        where: {userId, examId},
+        where: { userId, examId },
         include: {
             exam: true
         }
     })
 }
 
-const getAllResult = async (userId) : Promise<ExamResult[] | null> => {
+const getAllResult = async (userId): Promise<ExamResult[] | null> => {
     return prisma.examResult.findMany({
-        where: {userId},
+        where: { userId },
         include: {
             exam: true
         }
