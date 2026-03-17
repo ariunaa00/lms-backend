@@ -107,4 +107,14 @@ const getResult = async (userId, examId) : Promise<ExamResult[] | null> => {
     })
 }
 
-export default { getResult, saveExamResult, getExam, getExamsByLesson, getExamList, findExamById, createExam, updateExam, deleteExam }
+const getAllResult = async (userId) : Promise<ExamResult[] | null> => {
+    return prisma.examResult.findMany({
+        where: {userId},
+        include: {
+            exam: true
+        }
+    })
+}
+
+
+export default { getResult, getAllResult, saveExamResult, getExam, getExamsByLesson, getExamList, findExamById, createExam, updateExam, deleteExam }

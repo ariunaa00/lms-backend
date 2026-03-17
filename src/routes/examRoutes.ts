@@ -18,5 +18,7 @@ router.post('/:examId/question', upload.fields([
 
 router.post('/:examId/result', saveResult)
 router.get('/:examId/result', getResult)
+router.get('/result', getAllResult)
+
 
 export default router;
