@@ -21,6 +21,8 @@ export const loginAdmin = async (req: Request, res: Response, next: NextFunction
         
         const userPermissions = await userService.getUserPermissions(user.id)
 
+        console.log(userPermissions);
+
         if(!userPermissions.includes('login_admin_page')){
             return res.status(400).json({message: 'Админ хуудсанд нэвтрэх эрх байхгүй байна.'})
         }
