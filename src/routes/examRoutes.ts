@@ -8,6 +8,7 @@ const router = Router();
 router.get("/", getExamList);
 router.post("/", saveExam);
 router.get('/:examId', getExam)
+
 router.get("/:examId/questions", getQuestionsOfExam)
 router.post('/:examId/question', upload.fields([
     { name: "image", maxCount: 1 },
@@ -18,6 +19,8 @@ router.post('/:examId/question', upload.fields([
 
 router.post('/:examId/result', saveResult)
 router.get('/:examId/result', getResult)
+router.get('/allresult', getAllResult)
+
 
 
 export default router;
